@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teamcity 
+  labels:
+    app: teamcity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teamcity
+  template:
+    metadata:
+      labels:
+        app: teamcity
+    spec:
+      containers:
+      - name: nginx
+        image: jetbrains/teamcity-server
+        ports:
+        - containerPort: 8111 
+        volumeMounts:
+             - name:  teamcity-data
+               mountPath: /data/teamcity_server/datadir
+      volumes:
+       - name: teamcity-data
+         persistentVolumeClaim:
+           claimName: teamcity-data
